@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int ans = 0;
+
+        vector<pair<int,int>> dir = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+        int cur = 0;
+
+        std::function<void(int, int)> dfs = [&](int r, int c){
+            for(auto [dy, dx] : dir){
+                int nR = r + dy; int nC = c + dx;
+
+                if(nR>=0 && nR < grid.size() && nC>=0 && nC < grid[0].size() && grid[nR][nC] == 1){
+                    grid[nR][nC] = 2;
+                    cur++;
+                    dfs(nR, nC);
+                }
+            }
+            return;
+        };
+
+        for(int r = 0; r<grid.size(); r++){
+            for(int c = 0; c<grid[0].size(); c++){
+                if(grid[r][c] == 1){
+                    cur = 1;
+                    grid[r][c] = 2;
+                    dfs(r, c);
+                    ans = max(ans, cur);
+                    cur = 0;
+                }
+            }
+        }
+        return ans;
+    }
+};
